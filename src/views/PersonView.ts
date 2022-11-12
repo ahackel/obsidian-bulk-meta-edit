@@ -32,11 +32,7 @@ export class PersonView extends ItemView {
 
     public async redraw(): Promise<void> {
         const file = this.app.workspace.getActiveFile();
-        const person = new Person(file!, this.app);
-
-        this.component?.$set({
-            person
-        });
+        this.component?.$set({ person: Person.fromFile(file, this.app) });
     }
 
     async onClose() {

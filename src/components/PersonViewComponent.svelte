@@ -1,53 +1,67 @@
 <script lang="ts">
-	  import { log } from "console";
-import { DateInput, Icon, IconButton, Link } from "obsidian-svelte";
+	import { Button, DateInput, Icon, IconButton, Link } from "obsidian-svelte";
 	import type { Person } from "src/data/Person";
 	import PeopleLink from "./PeopleLink.svelte";
-	//export let app: App;
-	export let person: Person;
-
+	import { importContact } from "src/utils/vcsImporter";
+	export let person: Person | null;
 </script>
+
+<Button on:click={(e) => importContact()}>Import</Button>
+
 {#if person}
-<h1>{person.name}</h1>
+	<h1>{person.name}</h1>
 
-<div class="line"><Icon name="map-pin"/><div>{@html person.address}</div></div>
+	<div class="line">
+		<Icon name="map-pin" />
+		<div>{@html person.address}</div>
+	</div>
 
-{#if !isNaN(person.birthday)}
-<div class="line"><Icon name="cake"/>{person.birthdayString} ({person.age})</div>
-{/if}
+	{#if !isNaN(person.birthday)}
+		<div class="line">
+			<Icon name="cake" />{person.birthdayString} ({person.age})
+		</div>
+	{/if}
 
-{#if person.phone }
-<div class="line"><Icon name="phone"/>{person.phone}</div>
-{/if}
+	{#if person.phone}
+		<div class="line"><Icon name="phone" />{person.phone}</div>
+	{/if}
 
-{#if person.email }
-<div class="line"><Icon name="mail"/><a href="mailto:{person.email}">{person.email}</a></div>
-{/if}
+	{#if person.email}
+		<div class="line">
+			<Icon name="mail" /><a href="mailto:{person.email}"
+				>{person.email}</a
+			>
+		</div>
+	{/if}
 
-{#if person.url }
-<div class="line"><Icon name="link"/><Link href="{person.url}">{person.url}</Link></div>
-{/if}
+	{#if person.url}
+		<div class="line">
+			<Icon name="link" /><Link href={person.url}>{person.url}</Link>
+		</div>
+	{/if}
 
-{#if person.mother}
-<PeopleLink href={person.mother}><Icon name="smile"/></PeopleLink>
-{/if}
+	{#if person.mother}
+		<PeopleLink href={person.mother}><Icon name="smile" /></PeopleLink>
+	{/if}
 
-{#if person.father}
-<PeopleLink href={person.father}><Icon name="smile"/></PeopleLink>
-{/if}
+	{#if person.father}
+		<PeopleLink href={person.father}><Icon name="smile" /></PeopleLink>
+	{/if}
 
-{#each person.children as child}
-<PeopleLink href={child}><Icon name="baby" /></PeopleLink>
-{/each}
+	{#each person.children as child}
+		<PeopleLink href={child}><Icon name="baby" /></PeopleLink>
+	{/each}
+{:else}
+	<h1>No contact selected</h1>
 {/if}
 
 <style>
-    .line {
+	.line {
 		display: flex;
 		gap: 4px;
 		margin-bottom: 8px;
 		font-size: var(--nav-item-size);
-    	font-weight: var(--nav-item-weight);
+		font-weight: var(--nav-item-weight);
 		line-height: 1.5em;
-    }
+	}
 </style>
